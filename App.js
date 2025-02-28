@@ -16,14 +16,13 @@ import './App.css';
 
 function App() {
   const [cars, setCars] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true"
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // בדיקה אם המשתמש מחובר בעת טעינת הדף
   useEffect(() => {
-    if (!localStorage.getItem("isLoggedIn")) {
-      setIsLoggedIn(false);
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    if (loggedInStatus === "true") {
+      setIsLoggedIn(true);
     }
   }, []);
 
@@ -56,7 +55,10 @@ function App() {
       <div className="app">
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route
+            path="/"
+            element={isLoggedIn ? <Navigate to="/home" /> : <Login setIsLoggedIn={setIsLoggedIn} />}
+          />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={isLoggedIn ? <Home cars={cars} /> : <Navigate to="/login" />} />
@@ -73,3 +75,4 @@ function App() {
 }
 
 export default App;
+
